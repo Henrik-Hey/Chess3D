@@ -255,6 +255,7 @@ export default class Board extends Component<Board_props, Board_state> {
                             ) {
                                 selectedPiecePos = new THREE.Vector2(x, z);
                                 moveSet = PieceHelper.getMoveSet(selectedPiecePos.x, selectedPiecePos.y, BoardState);
+                                break;
                             }
                         } else if(!!selectedPiecePos) {
                             if(!!moveSet[x] && !!~moveSet[x].indexOf(z)) {
@@ -279,8 +280,8 @@ export default class Board extends Component<Board_props, Board_state> {
                                 moveSet = {};
                                 selectedPiecePos = undefined;
                                 currentTurn = isWhite ? 'b' : 'w';
-                                break;
                             }
+                            break;
                         }
                     }
                 };
