@@ -279,6 +279,7 @@ export default class Board extends Component<Board_props, Board_state> {
                                 moveSet = {};
                                 selectedPiecePos = undefined;
                                 currentTurn = isWhite ? 'b' : 'w';
+                                break;
                             }
                         }
                     }
