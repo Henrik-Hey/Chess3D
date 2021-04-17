@@ -43,6 +43,30 @@ export const FENLoader = (FEN: string): BoardState => {
     return { map, queryTable, currentTurn };
 }
 
+export const convertToFEN = (BoardState: BoardState): string => {
+    let output = "";
+
+    let emptySpaceCounter: number = 0;
+    BoardState.map.forEach((row: string[], index: number) => {
+        emptySpaceCounter = 0;
+        row.forEach(piece => {
+            if(piece === "")
+                emptySpaceCounter++;
+            else {
+                if(emptySpaceCounter > 0) {
+                    output += emptySpaceCounter;
+                    emptySpaceCounter = 0;
+                }
+                output += piece;
+            }
+        })
+        if(index != BoardState.map.length - 1)
+            output += "/";
+    })
+
+    return output;
+}
+
 export const ResetQueryTable = (BoardState: BoardState): BoardState => {
     BoardState.queryTable = {};
     const rows = BoardState.map;

@@ -5,6 +5,7 @@ import * as utils from '../util/GameMaths';
 import * as loaders from '../util/ModelLoader';
 import { FENLoader, BoardState, ResetQueryTable } from  '../util/BoardLoader';
 import PieceHelper from '../GameObjects/DataStructs/Piece';
+import { io } from "socket.io-client";
 
 interface Board_props {
 
@@ -51,6 +52,7 @@ export default class Board extends Component<Board_props, Board_state> {
         let { selectedPiecePos, selectedTile, BoardState, RecalcState, isCastingRay, moveSet, currentTurn } = this;
 
         const init = () => {
+            this.initSocket();
             console.clear();
 
             Promise.all([
@@ -185,7 +187,8 @@ export default class Board extends Component<Board_props, Board_state> {
 
         let BOARD_STATE_INDEX = 0;
 
-        function updateFunc(time: number) {
+        const updateFunc = (time: number) => {
+            BoardState = this.BoardState;
 
             for( let i = 0; i < scene.children.length; i++) {
                 const child = scene.children[i] as THREE.Mesh;
@@ -273,6 +276,7 @@ export default class Board extends Component<Board_props, Board_state> {
                                 }
 
                                 BoardState.map[x][z] = pieceToMove;
+                                console.log(BoardState.map);
                                 BoardState.map[selectedPiecePos.x][selectedPiecePos.y] = "";
 
                                 BoardState = ResetQueryTable(BoardState);
@@ -295,7 +299,31 @@ export default class Board extends Component<Board_props, Board_state> {
         }
 
         init();
+    }
 
+    initSocket() {
+        // @ts-ignore
+        const socket = io("ws://localhost:8080");
+
+        socket.on("connect", () => {
+            // either with send()
+            socket.send("Hello!");
+
+            // or with emit() and custom event names
+            socket.emit("salutations", "Hello!", { "mr": "john" }, Uint8Array.from([1, 2, 3, 4]));
+        });
+
+        // handle the event sent with socket.send()
+        socket.on("message", (data: any) => {
+            console.log(data);
+            this.BoardState = FENLoader(data);
+            console.log(this.BoardState);
+        });
+
+        // handle the event sent with socket.emit()
+        // socket.on("greetings", (elem1, elem2, elem3) => {
+        //     console.log(elem1, elem2, elem3);
+        // });
     }
 
 }
