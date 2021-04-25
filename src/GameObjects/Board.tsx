@@ -326,7 +326,7 @@ export default class Board extends Component<Board_props, Board_state> {
 
         socketConnection.emit(
             "board-state-change", 
-            BoardState
+            JSON.stringify(BoardState)
         );
     }
 
