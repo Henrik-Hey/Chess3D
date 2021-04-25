@@ -3,7 +3,7 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import * as THREE from 'three';
 import * as utils from '../util/GameMaths';
 import * as loaders from '../util/ModelLoader';
-import { FENLoader, BoardState, ResetQueryTable } from  '../util/BoardLoader';
+import { FENLoader, BoardState, ResetQueryTable, convertToFEN } from  '../util/BoardLoader';
 import PieceHelper from '../GameObjects/DataStructs/Piece';
 import { io } from "socket.io-client";
 
@@ -40,6 +40,9 @@ export default class Board extends Component<Board_props, Board_state> {
     private currentTurn: string = this.BoardState.currentTurn;
     private RecalcState: boolean = false;
     private moveSet: { [key: number] : number[]; } = {};
+
+    // Networking Stuffs
+    private socketConnection = io("ws://localhost:8080");
 
     render() {
         return (
@@ -241,7 +244,7 @@ export default class Board extends Component<Board_props, Board_state> {
                 const isWhite = currentTurn === "w";
                 const intersects = raycaster.intersectObjects( scene.children.filter(obj => obj.name === "Tile") );
     
-                if(intersects.length == 0) {
+                if(intersects.length === 0) {
                     selectedPiecePos = undefined;
                     moveSet = {};
                 } else {
@@ -281,6 +284,10 @@ export default class Board extends Component<Board_props, Board_state> {
 
                                 BoardState = ResetQueryTable(BoardState);
 
+                                console.log(
+                                    convertToFEN(BoardState)
+                                );
+
                                 moveSet = {};
                                 selectedPiecePos = undefined;
                                 currentTurn = isWhite ? 'b' : 'w';
@@ -301,29 +308,29 @@ export default class Board extends Component<Board_props, Board_state> {
         init();
     }
 
-    initSocket() {
-        // @ts-ignore
-        const socket = io("ws://localhost:8080");
+    initSocket():void {
+        const { socketConnection } = this;
 
-        socket.on("connect", () => {
+        socketConnection.on("connect", () => {
             // either with send()
-            socket.send("Hello!");
+            socketConnection.send("Hello!");
 
             // or with emit() and custom event names
-            socket.emit("salutations", "Hello!", { "mr": "john" }, Uint8Array.from([1, 2, 3, 4]));
+            socketConnection.emit("salutations", "Hello!", { "mr": "john" }, Uint8Array.from([1, 2, 3, 4]));
         });
 
         // handle the event sent with socket.send()
-        socket.on("message", (data: any) => {
+        socketConnection.on("message", (data: any) => {
             console.log(data);
             this.BoardState = FENLoader(data);
             console.log(this.BoardState);
         });
+    }
 
-        // handle the event sent with socket.emit()
-        // socket.on("greetings", (elem1, elem2, elem3) => {
-        //     console.log(elem1, elem2, elem3);
-        // });
+    transmitChange(BoardState: BoardState):void {
+        const { socketConnection } = this;
+
+        socketConnection.send("Hello!");
     }
 
 }

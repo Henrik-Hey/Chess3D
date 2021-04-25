@@ -60,6 +60,7 @@ export const convertToFEN = (BoardState: BoardState): string => {
                 output += piece;
             }
         })
+        if(emptySpaceCounter > 0) output += emptySpaceCounter;
         if(index != BoardState.map.length - 1)
             output += "/";
     })

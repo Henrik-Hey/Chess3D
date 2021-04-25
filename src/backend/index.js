@@ -24,6 +24,10 @@ io.on('connection', socket => {
 	socket.on("message", (data) => {
 	  console.log(data);
 	});
+
+	socket.on("board-state-change", (FENString) => {
+		console.log(FENString);
+	})
   
 	// handle the event sent with socket.emit()
 	socket.on("salutations", (elem1, elem2, elem3) => {
