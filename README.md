@@ -9,7 +9,7 @@
 - Major version: feat(feature_name); comment here 
 - Minor version: fix(fix_name); comment here
 
-[demo image](./img/demo.png)
+![demo image](./img/demo.png)
 
 
 # To do
