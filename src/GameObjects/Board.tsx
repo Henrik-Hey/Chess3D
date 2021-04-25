@@ -182,7 +182,6 @@ export default class Board extends Component<Board_props, Board_state> {
         }
 
         function onMouseClick(event: MouseEvent) {
-        
             mouseClick.x = ( event.clientX / window.innerWidth ) * 2 - 1;
             mouseClick.y = - ( event.clientY / window.innerHeight ) * 2 + 1;
             isCastingRay = true;
@@ -195,6 +194,7 @@ export default class Board extends Component<Board_props, Board_state> {
         const updateFunc = (time: number) => {
             BoardState = this.BoardState;
 
+            // Set up the board
             for( let i = 0; i < scene.children.length; i++) {
                 const child = scene.children[i] as THREE.Mesh;
 
@@ -238,6 +238,7 @@ export default class Board extends Component<Board_props, Board_state> {
                 }
             }
 
+            // Handle clicks
             if(isCastingRay) {
                 // update the picking ray with the camera and mouse position
                 raycaster.setFromCamera( mouseClick, camera );
@@ -301,7 +302,6 @@ export default class Board extends Component<Board_props, Board_state> {
 
             renderer.setClearColor( 0xffffff );
             renderer.render(scene, camera);
-
         }
 
         init();

@@ -8,3 +8,7 @@
 - We use conventional commits to automatically version the project
 - Major version: feat(feature_name); comment here 
 - Minor version: fix(fix_name); comment here
+
+
+# To do
+- [ ] Fix Cors errors 
