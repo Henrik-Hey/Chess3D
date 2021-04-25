@@ -285,9 +285,7 @@ export default class Board extends Component<Board_props, Board_state> {
 
                                 BoardState = ResetQueryTable(BoardState);
 
-                                console.log(
-                                    convertToFEN(BoardState)
-                                );
+                                this.transmitChange(BoardState);
 
                                 moveSet = {};
                                 selectedPiecePos = undefined;
@@ -312,16 +310,8 @@ export default class Board extends Component<Board_props, Board_state> {
     initSocket():void {
         const { socketConnection } = this;
 
-        socketConnection.on("connect", () => {
-            // either with send()
-            socketConnection.send("Hello!");
-
-            // or with emit() and custom event names
-            socketConnection.emit("salutations", "Hello!", { "mr": "john" }, Uint8Array.from([1, 2, 3, 4]));
-        });
-
         // handle the event sent with socket.send()
-        socketConnection.on("message", (data: any) => {
+        socketConnection.on("board-state-change", (data: any) => {
             console.log(data);
             this.BoardState = FENLoader(data);
             console.log(this.BoardState);
@@ -331,7 +321,10 @@ export default class Board extends Component<Board_props, Board_state> {
     transmitChange(BoardState: BoardState):void {
         const { socketConnection } = this;
 
-        socketConnection.send("Hello!");
+        socketConnection.emit(
+            "board-state-change", 
+            convertToFEN(BoardState)
+        );
     }
 
 }
