@@ -4,10 +4,7 @@
 - To start backend `npm run server;`
 
 
-# Conventional Commit
-- We use conventional commits to automatically version the project
-- Major version: feat(feature_name); comment here 
-- Minor version: fix(fix_name); comment here
+
 
 ![demo image](./img/demo.png)
 
@@ -29,3 +26,8 @@
             - email
         - per game, we need to keep track of
             - play 1 and 2's id and their color in the game
+
+# Conventional Commit
+- We use conventional commits to automatically version the project
+- Major version: feat(feature_name); comment here 
+- Minor version: fix(fix_name); comment here
