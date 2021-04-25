@@ -1,9 +1,10 @@
 # Chess3D
- A 3D chess game made for the browser using ThreeJS
+ - A 3D chess game made for the browser using ThreeJS
+- The motivation for this project is to build experience with JS 3D iteractions. We like chess and love JS so this is the best of both worlds.
+ - Open source 3D chess game built with Typescript, Socket.io, NodeJS, and Threejs.
+ - Accessible from any browser and be able to play with friends. 
 - To run frontend `npm start;`
 - To start backend `npm run server;`
-
-
 
 
 ![demo image](./img/demo.png)
