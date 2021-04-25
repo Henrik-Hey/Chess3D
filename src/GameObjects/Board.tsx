@@ -56,7 +56,7 @@ export default class Board extends Component<Board_props, Board_state> {
 
         const init = () => {
             this.initSocket();
-            console.clear();
+            console.clear(); // b/c of hot holding there are old warnings and errors
 
             Promise.all([
                 loaders.ModelLoaderOBJ('/res/tower.obj'),
@@ -69,11 +69,11 @@ export default class Board extends Component<Board_props, Board_state> {
                 let piece;
                 let isBlack;
                 const GeneratePiece = (meshIndex: number, i: number, j: number, cp: string) => {
-                    isBlack = cp === cp.toUpperCase();
+                    isBlack = cp === cp.toUpperCase(); // our board is coded so that uppercase represents black pieces
                     piece = Meshes[meshIndex].clone();
                     if(meshIndex === 1) piece.rotateY(utils.DegToRad(90 * (isBlack ? 1 : -1)));
                     piece.position.set(i, -0.2, j);
-                    piece.scale.divide(new THREE.Vector3(5, 5, 5))
+                    piece.scale.divide(new THREE.Vector3(5, 5, 5)); // downscales the piece by dimensions of 5
                     // @ts-ignore
                     piece.material = new THREE.MeshPhongMaterial( {
                         color: isBlack ? darkTone : lightTone, 
@@ -85,7 +85,7 @@ export default class Board extends Component<Board_props, Board_state> {
                     piece.receiveShadow = false; //default
                     scene.add( piece );
                 }
-
+                // Generate all possible pieces
                 for(let i = 0; i < 8; i++) {
                     for(let j = 0; j < 8; j++) {
                         const cp = BoardState.map[i][j];
@@ -127,6 +127,7 @@ export default class Board extends Component<Board_props, Board_state> {
             camera.position.x = -3.5;
             camera.rotateX(utils.DegToRad(-60))
 
+            // Create the board
             for(let i = 0; i < 8; i++) {
                 for(let j = 0; j < 8; j++) {
                     const tileGeom = new THREE.BoxGeometry( tileSize, tileSize, 0.5 );
