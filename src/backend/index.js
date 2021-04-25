@@ -5,7 +5,7 @@ const io = require('socket.io')(server);
 const INITIAL_STATE = 'rnbqkbnr/1ppppppp/p7/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
 
 const sendInitialBoardState = (socket) => {
-	socket.emit("board-state-change", INITIAL_STATE);
+	socket.emit("initialize-board-state", INITIAL_STATE);
 }
 
 const handleBoardStateChange = (socket) => {
