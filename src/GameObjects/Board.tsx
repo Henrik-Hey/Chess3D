@@ -191,6 +191,7 @@ export default class Board extends Component<Board_props, Board_state> {
 
         let BOARD_STATE_INDEX = 0;
 
+        // pieces get placed on the board
         const updateFunc = (time: number) => {
             BoardState = this.BoardState;
 
@@ -203,7 +204,7 @@ export default class Board extends Component<Board_props, Board_state> {
 
                     if(!!moveSet[x] && !!~moveSet[x].indexOf(z))
                         // @ts-ignore
-                        child.material.color.set( 0xff0000 );
+                        child.material.color.set( 0xff0000 ); // shows possible moves
                     // @ts-ignore
                     else if(child.material) // @ts-ignore
                         child.material.color.set( isOdd ? lightTone : darkTone ); // @ts-ignore
@@ -225,7 +226,7 @@ export default class Board extends Component<Board_props, Board_state> {
                                 break;
                         }
                     }
-                    if(BoardState.queryTable[child.name]) {
+                    if(BoardState.queryTable[child.name]) {  // placing the pieces onto the board, true if it is a piece
                         BOARD_STATE_INDEX = BoardState.queryTable[child.name].index;
 
                         if(!BoardState.queryTable[child.name].queue[BOARD_STATE_INDEX]) continue;
@@ -255,7 +256,7 @@ export default class Board extends Component<Board_props, Board_state> {
     
                         // first check if we've selected a piece 
                         const selectedBoardTile = BoardState.map[x][z];
-                        if(selectedBoardTile !== "" && !PieceHelper.isOpponent(isWhite, selectedBoardTile)) {
+                        if(selectedBoardTile !== "" && !PieceHelper.isOpponent(isWhite, selectedBoardTile)) {  // selecting a piece
                             if(
                                 ( isWhite && PieceHelper.isWhite(selectedBoardTile)) ||
                                 (!isWhite && PieceHelper.isBlack(selectedBoardTile))
@@ -264,7 +265,7 @@ export default class Board extends Component<Board_props, Board_state> {
                                 moveSet = PieceHelper.getMoveSet(selectedPiecePos.x, selectedPiecePos.y, BoardState);
                                 break;
                             }
-                        } else if(!!selectedPiecePos) {
+                        } else if(!!selectedPiecePos) { // piece is selected
                             if(!!moveSet[x] && !!~moveSet[x].indexOf(z)) {
                                 const pieceToMove = BoardState.map[selectedPiecePos.x][selectedPiecePos.y];
 
