@@ -6,6 +6,7 @@ import * as loaders from '../util/ModelLoader';
 import { FENLoader, BoardState, ResetQueryTable, convertToFEN } from  '../util/BoardLoader';
 import PieceHelper from '../GameObjects/DataStructs/Piece';
 import { io } from "socket.io-client";
+import { BoardStateContext } from '../providers/BoardStateProvider';
 
 interface Board_props {
 
@@ -16,6 +17,7 @@ interface Board_state {
 }
 
 export default class Board extends Component<Board_props, Board_state> {
+    static contextType = BoardStateContext;
 
     // React stuffs
     private container = createRef<HTMLDivElement>();
@@ -25,10 +27,8 @@ export default class Board extends Component<Board_props, Board_state> {
     private camera: THREE.Camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.01, 100);
     private scene: THREE.Scene = new THREE.Scene();
     private raycaster: THREE.Raycaster = new THREE.Raycaster();
-    private mouse: THREE.Vector2 = new THREE.Vector2();
     private mouseClick: THREE.Vector2 = new THREE.Vector2();
     private selectedPiecePos: THREE.Vector2 | undefined;
-    private selectedTile: THREE.Mesh | undefined;
     private isCastingRay: boolean = false;
 
     // Chess stuffs
@@ -38,7 +38,6 @@ export default class Board extends Component<Board_props, Board_state> {
     private TileUUIDs: Set<String> = new Set();
     private BoardState: BoardState = FENLoader('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1');
     private currentTurn: string = this.BoardState.currentTurn;
-    private RecalcState: boolean = false;
     private moveSet: { [key: number] : number[]; } = {};
 
     // Networking Stuffs
@@ -51,8 +50,10 @@ export default class Board extends Component<Board_props, Board_state> {
     }
 
     componentDidMount() {
-        const { camera, scene, renderer, mouse, mouseClick, raycaster, tileSize, darkTone, lightTone, TileUUIDs } = this;
-        let { selectedPiecePos, selectedTile, BoardState, RecalcState, isCastingRay, moveSet, currentTurn } = this;
+        const { camera, scene, renderer, mouseClick, raycaster, tileSize, darkTone, lightTone, TileUUIDs, context } = this;
+        let { selectedPiecePos, BoardState, isCastingRay, moveSet, currentTurn } = this;
+
+        const { setIsLoading } = context;
 
         const init = () => {
             this.initSocket();
@@ -68,6 +69,7 @@ export default class Board extends Component<Board_props, Board_state> {
             ]).then((Meshes: THREE.Mesh[]) => {
                 let piece;
                 let isBlack;
+
                 const GeneratePiece = (meshIndex: number, i: number, j: number, cp: string) => {
                     isBlack = cp === cp.toUpperCase(); // our board is coded so that uppercase represents black pieces
                     piece = Meshes[meshIndex].clone();
@@ -119,6 +121,7 @@ export default class Board extends Component<Board_props, Board_state> {
                         }
                     }
                 }
+                setIsLoading(false);
             });
 
 
@@ -209,7 +212,7 @@ export default class Board extends Component<Board_props, Board_state> {
                     else if(child.material) // @ts-ignore
                         child.material.color.set( isOdd ? lightTone : darkTone ); // @ts-ignore
                 } else if(child.material) {
-                    if(child.position.x == selectedPiecePos?.x && child.position.z == selectedPiecePos?.y) {
+                    if(child.position.x === selectedPiecePos?.x && child.position.z === selectedPiecePos?.y) {
                         child.position.y = -0.2 + (Math.sin(time / 200)) / 10;
                         child.rotation.y += 1 / 30;
                     } else {
@@ -323,6 +326,8 @@ export default class Board extends Component<Board_props, Board_state> {
 
     transmitChange(BoardState: BoardState):void {
         const { socketConnection } = this;
+
+        console.log('fired transmit change');
 
         socketConnection.emit(
             "board-state-change", 
