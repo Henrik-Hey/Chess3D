@@ -9,9 +9,8 @@ const sendInitialBoardState = (socket) => {
 }
 
 const handleBoardStateChange = (socket) => {
-	socket.on("board-state-change", (FENString) => {
-		console.log(FENString);
-		socket.emit("board-state-change", FENString);
+	socket.on("board-state-change", BoardState => {
+		socket.emit("board-state-change", BoardState);
 	})
 }
 
