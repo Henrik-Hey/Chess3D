@@ -10,7 +10,7 @@ const GUI = () => {
     return (
         <InfoTile>
             <InfoRow>{isLoading ? 'Loading...' : 'Done'}</InfoRow>
-            {/* <InfoRow>{boardState?.currentTurn === 'w' ? 'Loading...' : 'Done'}</InfoRow> */}
+            <InfoRow>{boardState?.currentTurn === 'w' ? 'White' : 'Black'}</InfoRow>
         </InfoTile>
     ) 
 }

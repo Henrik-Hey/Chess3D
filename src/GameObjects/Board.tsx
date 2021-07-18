@@ -317,12 +317,14 @@ export default class Board extends Component<Board_props, Board_state> {
         socketConnection.on("initialize-board-state", (data: any) => {
             this.BoardState = FENLoader(data);
             setBoardState(this.BoardState);
+            console.log('initial state creation');
         })
 
         // handle the event sent with socket.send()
         socketConnection.on("board-state-change", (data: any) => {
             this.BoardState = JSON.parse(data);
             setBoardState(this.BoardState);
+            console.log('updated board state');
         });
     }
 
