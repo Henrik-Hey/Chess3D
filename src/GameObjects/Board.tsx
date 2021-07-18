@@ -283,9 +283,11 @@ export default class Board extends Component<Board_props, Board_state> {
                                         }
                                     }
                                 }
+                                currentTurn = isWhite ? 'b' : 'w';
 
                                 BoardState.map[x][z] = pieceToMove;
                                 BoardState.map[selectedPiecePos.x][selectedPiecePos.y] = "";
+                                BoardState.currentTurn = currentTurn;
 
                                 BoardState = ResetQueryTable(BoardState);
 
@@ -293,7 +295,6 @@ export default class Board extends Component<Board_props, Board_state> {
 
                                 moveSet = {};
                                 selectedPiecePos = undefined;
-                                currentTurn = isWhite ? 'b' : 'w';
                             }
                             break;
                         }

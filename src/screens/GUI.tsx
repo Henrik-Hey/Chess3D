@@ -7,10 +7,12 @@ const GUI = () => {
 
     console.log("" + (new Test("Hello world!")), boardState);
 
+    const currentTurn = boardState?.currentTurn === 'w' ? 'White' : 'Black';
+
     return (
         <InfoTile>
-            <InfoRow>{isLoading ? 'Loading...' : 'Done'}</InfoRow>
-            <InfoRow>{boardState?.currentTurn === 'w' ? 'White' : 'Black'}</InfoRow>
+            <InfoRow>Loading State: {isLoading ? 'Loading...' : 'Done'}</InfoRow>
+            <InfoRow>Current Turn: {currentTurn}</InfoRow>
         </InfoTile>
     ) 
 }
