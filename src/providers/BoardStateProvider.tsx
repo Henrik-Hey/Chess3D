@@ -1,8 +1,11 @@
 import React, { Dispatch, SetStateAction, useContext, useState } from 'react';
+import BoardState from '../GameObjects/Board';
 
 interface BoardStateContextInterface {
     isLoading?: boolean;
     setIsLoading?: Dispatch<SetStateAction<boolean>>
+    boardState?: BoardState;
+    setBoardState?: Dispatch<SetStateAction<BoardState>>
 }
 
 interface BoardStateProviderProps {
@@ -13,8 +16,12 @@ const BoardStateContext =  React.createContext({} as BoardStateContextInterface)
 
 const BoardStateProvider = (props: BoardStateProviderProps) => {
     const [isLoading, setIsLoading] = useState(true);
+    const [boardState, setBoardState] = useState({} as BoardState);
 
-    const value: BoardStateContextInterface = { isLoading, setIsLoading };
+    const value: BoardStateContextInterface = { 
+        isLoading, setIsLoading,
+        boardState, setBoardState,
+    };
     return (
         <BoardStateContext.Provider value={value}>
             {props.children}
@@ -29,4 +36,8 @@ const useBoardContext = () => {
     return context;
 }
 
-export { BoardStateProvider, useBoardContext, BoardStateContext };
+export { 
+    BoardStateProvider, 
+    useBoardContext, 
+    BoardStateContext, 
+};
