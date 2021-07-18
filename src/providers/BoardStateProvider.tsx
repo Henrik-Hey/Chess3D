@@ -1,5 +1,5 @@
 import React, { Dispatch, SetStateAction, useContext, useState } from 'react';
-import BoardState from '../GameObjects/Board';
+import { BoardState } from '../util/BoardLoader';
 
 interface BoardStateContextInterface {
     isLoading?: boolean;
