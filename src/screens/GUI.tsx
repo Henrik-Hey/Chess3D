@@ -4,9 +4,6 @@ import { useBoardContext } from '../providers/BoardStateProvider'
 
 const GUI = () => {
     const { isLoading, boardState } = useBoardContext();
-
-    console.log("" + (new Test("Hello world!")), boardState);
-
     const currentTurn = boardState?.currentTurn === 'w' ? 'White' : 'Black';
 
     return (
@@ -37,23 +34,3 @@ const InfoTile = styled.div`
 `
 
 export default GUI;
-
-class Test {
-    value: string;
-
-    constructor(string: string) {
-        this.value = string;
-    }
-
-    valueOf() {
-        console.log('valueOf')
-        return undefined;
-    }
-
-    toString() {
-        console.log('toString');
-        return "value: ";
-    }
-}
-
-// {} + "hi" == NaN
